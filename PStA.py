@@ -35,14 +35,33 @@ def evalExpr(inp, env):
 
 
 def solve(expressions):
+    """""
+    >>> exprs = ["x + y +z = 10", "x < y", "x < 3", "0 < x"]
+    >>> sol = solve(exprs)
+    >>> sol                     # doctest: +SKIP
+    {'y = 2', 'z = 7', 'x = 1'} # doctest: +SKIP
+    >>> exprs = ["x + y +z = 10", "x < y or x = y", "x < 3", "5 < x or 0 < x"]
+    >>> sol = solve(exprs)
+    >>> sol                     # doctest: +SKIP
+    {'z = 7', 'x = 1', 'y = 2'} # doctest: +SKIP
+    """""
+
     s = z3.Solver()
 
     for expr in expressions:
         s.add(result(ParseExpr().parse(expr)).toZ3())
 
-    print(s.check())
-    if s.check() == "sat":
-        print(s.model())
+    s.check()
+    if s.check().r == 1:
+        a = s.model()
+        modelset = set()
+        for b in a:
+            name = b
+            val = a[b]
+            modelset.add(f'{name} = {val}')
+        return modelset
+    else:
+        print("No solution!")
 
 
 def printExpr(inp):
@@ -82,13 +101,15 @@ def evalExpr(inp, env):
     """""
     res = ParseExpr().parse(inp)
     a = type(res[0][0].toZ3())
-    print(a)
     print(result(res).ev(env))
 
 
-# le lt ge gt
-
     # pytest --doctest-modules PStA.py
+
+
+
+# pytest --doctest-modules PStA.py
+
 
 if __name__ == "__main__":
     env = {'x': 1, 'y': 2, 'z': 3}
@@ -119,10 +140,12 @@ if __name__ == "__main__":
     # evalExpr("14 < x and 3 * 1 = 3 + 0 * 2", {'x': 15})
     # printExpr("14 < x and 3 * 1 = 3 + 0 * 2")
     # evalExpr("exp(x)", {'x': 5})
-    test = ["x + y +z = 10", "x < y", "x < 3", "0 < x", "0=1"]
-    solve(test)
 
 
+    # exprs = ["x + y + z = 10", "x < y", "x < 3", "0 < x", "1<0"]
+    exprs = ["x + y +z = 10", "x < y or x = y", "x < 3", "5 < x or 0 < x"]
+    sol = solve(exprs)
+    print(sol)
 
 
 
