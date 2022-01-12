@@ -32,18 +32,32 @@ def evalExpr(inp, env):
     <variable> ::= IDENTIFIER
 """""
 
+def pytest_helper(expr, sol):
+    test_set = {}
+    for s in sol:
+        sol_name, sol_val = s.split('=', 1)
+        test_set.update({sol_name[:-1]: int(sol_val[1:])})
+    for x in expr:
+        evalExpr(x, test_set)
 
 
 def solve(expressions):
     """""
     >>> exprs = ["x + y +z = 10", "x < y", "x < 3", "0 < x"]
-    >>> sol = solve(exprs)
-    >>> sol                     # doctest: +SKIP
-    {'y = 2', 'z = 7', 'x = 1'} # doctest: +SKIP
+    >>> sol = solve(exprs)                   
+    >>> pytest_helper(exprs, sol)
+    True
+    True
+    True
+    True
+    
     >>> exprs = ["x + y +z = 10", "x < y or x = y", "x < 3", "5 < x or 0 < x"]
     >>> sol = solve(exprs)
-    >>> sol                     # doctest: +SKIP
-    {'z = 7', 'x = 1', 'y = 2'} # doctest: +SKIP
+    >>> pytest_helper(exprs, sol)
+    True
+    True
+    True
+    True
     """""
 
     s = z3.Solver()
@@ -104,15 +118,12 @@ def evalExpr(inp, env):
     print(result(res).ev(env))
 
 
-    # pytest --doctest-modules PStA.py
-
-
 
 # pytest --doctest-modules PStA.py
 
 
 if __name__ == "__main__":
-    env = {'x': 1, 'y': 2, 'z': 3}
+    # env = {'x': 1, 'y': 2, 'z': 3}
 
     # s = z3.Solver()
     # s.add(z3.Int("x") == z3.Int("y"))
@@ -143,8 +154,11 @@ if __name__ == "__main__":
 
 
     # exprs = ["x + y + z = 10", "x < y", "x < 3", "0 < x", "1<0"]
+
+
     exprs = ["x + y +z = 10", "x < y or x = y", "x < 3", "5 < x or 0 < x"]
     sol = solve(exprs)
+    pytest_helper(exprs, sol)
     print(sol)
 
 
