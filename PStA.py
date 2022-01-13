@@ -1,5 +1,4 @@
 from bool import *
-from se1 import *
 from pcomb import *
 import z3
 
@@ -158,8 +157,34 @@ if __name__ == "__main__":
 
     exprs = ["x + y +z = 10", "x < y or x = y", "x < 3", "5 < x or 0 < x"]
     sol = solve(exprs)
-    pytest_helper(exprs, sol)
     print(sol)
 
+    exprs = ["x + y +z = 10", "x < y", "x < 3", "0 < x", "36 = 36", "i = 12"]
+    sol = solve(exprs)
 
+    ac = ["x = y"]
+    acc = solve(ac)
+    print(acc)
 
+    printExpr("x = y")
+
+    env = {'x': 1, 'y': 2, 'z': 3}
+    evalExpr("x = y", env)
+
+    printExpr("x = y")
+    printExpr("x + 2 * y")
+    printExpr("x < 2 and y < 1")
+    printExpr("(x + 2 * y < 15 + x * x) or z = 5")
+    printExpr("x + 2 * y < 15 + x * x or z = 5")
+
+    env = {'x': 1, 'y': 2, 'z': 3}
+    evalExpr("x = y", env)
+    evalExpr("x + 2 * y", env)
+    evalExpr("x < 2 and y < 1", env)
+    evalExpr("(x + 2*y < 15 + x * x) or z = 5", env)
+    evalExpr("x + 2*y < 15 + x * x or z = 5", env)
+    evalExpr("x * 2 + 3 < x * (2 + 3)", env)
+    evalExpr("y * 2 + 3 < y * (2 + 3)", env)
+    evalExpr("2*                                       3+23+3*12", {})
+    evalExpr("5 = 5", {})
+    evalExpr("i = i", {'i': 2})

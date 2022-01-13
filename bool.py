@@ -38,10 +38,10 @@ class ParseCmp(Parser):
                         Return(Less(l, r)) if cmp == "<" else Return(Equal(l, r)))))
 
 
-class ParseBVar(Parser):
-    def __init__(self):
-        self.parser = ParseIdentifier() >> (lambda name:
-                      Return(BVar(name)))
+# class ParseBVar(Parser):
+#     def __init__(self):
+#         self.parser = ParseIdentifier() >> (lambda name:
+#                       Return(BVar(name)))
 
 
 class ParseBParen(Parser):
@@ -65,18 +65,19 @@ class ParseAnd(Parser):
                       ParseDisj() >> (lambda y:
                       Return(And(x, y)))))
 
+
 class BExpr:
     pass
 
-class BVar(BExpr):
-    def __init__(self, name):
-        self.name = name
-
-    def __str__(self):
-        return self.name
-
-    def ev(self, env):
-        return env[self.name]
+# class BVar(BExpr):
+#     def __init__(self, name):
+#         self.name = name
+#
+#     def __str__(self):
+#         return self.name
+#
+#     def ev(self, env):
+#         return env[self.name]
 
 class Op2(BExpr):
     def __init__(self, left, right):
