@@ -81,11 +81,6 @@ class Con(Expr):
     def ev(self, env):
         return self.val
 
-    def __eq__(self, other):
-        if type(other).__name__ != "Con":
-            return False
-        return self.val == other.val
-
     def toZ3(self):
         return self.val
 
@@ -102,14 +97,6 @@ class Var(Expr):
             return -env[self.name[1:]]
         return env[self.name]
 
-    def __eq__(self, other):
-        if type(other).__name__ != "Var":
-            return False
-        return self.name == other.name
-
-    def vars_(self):
-        return [self.name]
-
     def toZ3(self):
         return z3.Int(self.name)
 
@@ -124,19 +111,6 @@ class BinOp(Expr):
 
     def ev(self, env):
         return self.fun(self.left.ev(env), self.right.ev(env))
-
-    def __eq__(self, other):
-        if not isinstance(other, BinOp):
-            return False
-        return self.name == other.name and self.left == other.left and self.right == other.right
-
-    def vars_(self):
-        return list(set(self.left.vars_() + self.right.vars_()))
-        #Liste zu set damit duplikate weg sind und wieder zu einer liste
-
-    def toZ3(self):
-        self.left.toZ3()
-        self.right.toz3()
 
 
 class Plus(BinOp):

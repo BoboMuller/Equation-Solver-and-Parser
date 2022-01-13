@@ -122,34 +122,30 @@ def evalExpr(inp, env):
 
 
 if __name__ == "__main__":
-    # env = {'x': 1, 'y': 2, 'z': 3}
+    env = {'x': 1, 'y': 2, 'z': 3}
 
-    # s = z3.Solver()
-    # s.add(z3.Int("x") == z3.Int("y"))
-    # b = Less(Plus(Var("x"), Con(1)), Var("y")).toZ3()
-    # c = result(ParseExpr().parse("(((2+2)*3)+2+x = 5 and 2 < 5) or 0 < x")).toZ3()
-    # d = 0
-    # # c = b.toZ3()
-    # # e = 0
-    # # s.add(b)
-    # # g = z3.And(5 == 5, z3.Int("x") == 2)
-    # s.add(c)
-    # print(s.check())
-    # print(s.model())
+    s = z3.Solver()
+    s.add(z3.Int("x") == z3.Int("y"))
+    b = Less(Plus(Var("x"), Con(1)), Var("y")).toZ3()
+    c = result(ParseExpr().parse("(((2+2)*3)+2+x = 5 and 2 < 5) or 0 < x")).toZ3()
+    d = 0
+    e = 0
+    s.add(b)
+    g = z3.And(5 == 5, z3.Int("x") == 2)
+    s.add(c)
+    print(s.check())
 
-    # evalExpr("  (((2+2)*3)+2 = 5 and 4 < 5) or 1 < 2 ", {})
-    # print(result(ParseExpr().parse("2+2")))
-    # print(result(ParseEqual().parse("x*x = 2+y+exp(e*2)")))
-    # print(result(ParseEqual().parse("x = 3*2" and "x = 2")))
 
-    # a, b = z3.Reals("a b")
-    # s.add([a == 2.1, b >= a])
-    #
-    # print(s.check(), s.model())
+    evalExpr("  (((2+2)*3)+2 = 5 and 4 < 5) or 1 < 2 ", {})
+    print(result(ParseExpr().parse("2+2")))
 
-    # evalExpr("14 < x and 3 * 1 = 3 + 0 * 2", {'x': 15})
-    # printExpr("14 < x and 3 * 1 = 3 + 0 * 2")
-    # evalExpr("exp(x)", {'x': 5})
+
+    a, b = z3.Reals("a b")
+    s.add([a == 2.1, b >= a])
+
+
+    evalExpr("14 < x and 3 * 1 = 3 + 0 * 2", {'x': 15})
+    printExpr("14 < x and 3 * 1 = 3 + 0 * 2")
 
 
     # exprs = ["x + y + z = 10", "x < y", "x < 3", "0 < x", "1<0"]
@@ -188,3 +184,5 @@ if __name__ == "__main__":
     evalExpr("2*                                       3+23+3*12", {})
     evalExpr("5 = 5", {})
     evalExpr("i = i", {'i': 2})
+
+    print(result(ParseExpr().parse("x*x = 2+y+exp(e*2)")))

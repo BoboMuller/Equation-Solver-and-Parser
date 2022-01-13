@@ -192,14 +192,3 @@ class ParseSymbol(Parser):
     def __init__(self, string):
         self.parser = ParseToken(ParseString(string))
 
-
-class ParseIdentifier(Parser):
-    """
-    >>> ParseIdentifier().parse("   x1   ")
-    [('x1', '')]
-    >>> ParseIdentifier().parse("1x")
-    []
-    """
-
-    def __init__(self):
-        self.parser = ParseToken(ParseIdent())
