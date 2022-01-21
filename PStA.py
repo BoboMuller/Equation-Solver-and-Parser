@@ -163,6 +163,10 @@ if __name__ == "__main__":
     acc = solve(ac)
     print(acc)
 
+    ad = ["x = x + 1"]
+    adb = solve(ad)
+    print(adb)
+
     printExpr("x = y")
 
     env = {'x': 1, 'y': 2, 'z': 3}
