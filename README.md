@@ -1,7 +1,9 @@
 # Equation-Solver-and-Parser
 Equation solver and parser
 
-This little programm can be used to solve systems of (in)equations with the help of z3.
+This little programm can be used to solve systems of (in)equations with the help of z3. And also to calculate simple expressions while respecting basic math rules.
+
+The branch called old has some functionality this one does not have like substraction, division, exponention, sin, cos, tan.
 
 It can parse the text of your input and transform it into the language of z3.
 z3 will find a solution and returns exactly one, if there is one.
