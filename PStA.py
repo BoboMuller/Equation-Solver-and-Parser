@@ -157,6 +157,7 @@ if __name__ == "__main__":
 
     exprs = ["x + y +z = 10", "x < y", "x < 3", "0 < x", "36 = 36", "i = 12"]
     sol = solve(exprs)
+    pytest_helper(exprs, sol)
 
     ac = ["x = y"]
     acc = solve(ac)
