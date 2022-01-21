@@ -73,6 +73,7 @@ class ParseMany(Parser):
     def __init__(self, parser):
         self.parser = ParseSome(parser) ^ Return([])
 
+
 def cons(x, xs):
     """
     >>> cons("a", [])
@@ -100,10 +101,12 @@ class ParseInt(Parser):
     >>> ParseInt().parse("--89abc")
     []
     """
+
     def __init__(self):
         self.parser = (ParseChar('-') >> (lambda _: \
-                       ParseNat()     >> (lambda n: \
-                       Return(-n)))) ^ ParseNat()
+                                              ParseNat() >> (lambda n: \
+                                                                 Return(-n)))) ^ ParseNat()
+
 
 class ParseNat(Parser):
     """
@@ -112,10 +115,12 @@ class ParseNat(Parser):
     >>> ParseNat().parse("-89abc")
     []
     """
+
     def __init__(self):
         self.parser = Seq(ParseSome(ParseDigit()), lambda ns: \
-                          Return(int(ns)))
-        
+            Return(int(ns)))
+
+
 class ParseDigit(Parser):
     """
     >>> ParseDigit().parse("abc")
@@ -125,8 +130,10 @@ class ParseDigit(Parser):
     >>> ParseDigit().parse("89abc")
     [('8', '9abc')]
     """
+
     def __init__(self):
         self.parser = ParseIf(lambda c: c in "0123456789")
+
 
 class ParseIdent(Parser):
     """
@@ -135,10 +142,12 @@ class ParseIdent(Parser):
     >>> ParseIdent().parse("1x")
     []
     """
+
     def __init__(self):
         self.parser = ParseIf(str.isalpha) >> (lambda c:
-                      ParseMany(ParseIf(str.isalnum)) >> (lambda cs:
-                      Return(cons(c, cs))))
+                                               ParseMany(ParseIf(str.isalnum)) >> (lambda cs:
+                                                                                   Return(cons(c, cs))))
+
 
 class ParseToken(Parser):
     """
@@ -147,11 +156,13 @@ class ParseToken(Parser):
     >>> ParseToken(ParseChar('(')).parse("  + ( abc")
     []
     """
+
     def __init__(self, parser):
         self.parser = ParseMany(ParseIf(str.isspace)) >> (lambda _:
-                      parser                          >> (lambda res:
-                      ParseMany(ParseIf(str.isspace)) >> (lambda _:
-                      Return(res))))
+                                                          parser >> (lambda res:
+                                                                     ParseMany(ParseIf(str.isspace)) >> (lambda _:
+                                                                                                         Return(res))))
+
 
 class ParseString(Parser):
     """
@@ -162,12 +173,14 @@ class ParseString(Parser):
     >>> ParseString("hello").parse(" hello")
     []
     """
+
     def __init__(self, string):
         self.parser = Return('') if string == '' else \
-                      ParseChar(string[0]) >> (lambda c: \
-                      ParseString(string[1:]) >> (lambda cs: \
-                      Return(cons(c, cs))))
-        
+            ParseChar(string[0]) >> (lambda c: \
+                                         ParseString(string[1:]) >> (lambda cs: \
+                                                                         Return(cons(c, cs))))
+
+
 class ParseSymbol(Parser):
     """
     >>> ParseSymbol("exp").parse("    exp   ")
@@ -175,15 +188,7 @@ class ParseSymbol(Parser):
     >>> ParseSymbol("exp").parse("   aexp  ")
     []
     """
+
     def __init__(self, string):
         self.parser = ParseToken(ParseString(string))
 
-class ParseIdentifier(Parser):
-    """
-    >>> ParseIdentifier().parse("   x1   ")
-    [('x1', '')]
-    >>> ParseIdentifier().parse("1x")
-    []
-    """
-    def __init__(self):
-        self.parser = ParseToken(ParseIdent())
